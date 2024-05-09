@@ -41,7 +41,8 @@ Route::prefix('v1')->group(
         Route::middleware('auth:sanctum')->post('post/add', [ArticleController::class, 'add']);     // Thêm bài viết
         Route::get('post/show', [ArticleController::class, 'show']); // Lấy tất cả bài viết
         Route::get('post/show/{id}', [ArticleController::class, 'showById']); // Lấy bài viết theo id
-        Route::get('post/topic/{id}', [ArticleController::class, 'showByTopic']); // Lấy bài viết theo id
+        Route::get('post/topic/{id}', [ArticleController::class, 'showByTopic']); // Lấy bài viết chủ đề
+        Route::get('post/show/article/new', [ArticleController::class, 'articleNew']); // Lấy bài viết mới
         Route::middleware('auth:sanctum')->post('post/comment/add', [ArticleController::class, 'addComment']);
         Route::middleware('auth:sanctum')->put('post/updateStatus/{id}', [ArticleController::class, 'updateStatus']);
         Route::get('post/show/comments/{id}', [ArticleController::class, 'showCommentByArticle']); // Lấy comment theo bài viết 
@@ -66,9 +67,11 @@ Route::prefix('v1')->group(
         Route::get('topic/show/{id}', [TopicController::class, 'showById']); // Lấy địa điểm theo id
 
         Route::get('festival/show', [FestivalController::class, 'show']); // Lấy tất cả sự kiện
-        Route::get('festival/show/month/{month}', [FestivalController::class, 'showPagination']); // Lấy tất cả sự kiện
+        Route::get('festival/show/month/{month}', [FestivalController::class, 'showFestivalByMonth']); // Lấy tất cả sự kiện
         Route::middleware('auth:sanctum')->post('festival/add', [FestivalController::class, 'add']); // thêm sự kiện
         Route::get('festival/show/{id}', [FestivalController::class, 'showById']); // Lấy sự kiện theo id
+        Route::middleware('auth:sanctum')->put('festival/updateStatus/{id}', [FestivalController::class, 'updateStatus']); // Cập nhật trạng thái status
+        Route::middleware('auth:sanctum')->delete('festival/delete/{id}', [FestivalController::class, 'delete']); // Cập nhật trạng thái status
 
         Route::middleware('auth:sanctum')->put('user/updateProfile/{id}', [UserController::class, 'updateProfile']);
 
@@ -78,6 +81,11 @@ Route::prefix('v1')->group(
         Route::middleware('auth:sanctum')->get('me', [LoginController::class, 'getMe']);
 
         Route::post('upload', [UploadController::class, 'upload']); //Upload ảnh trong bài viết
+        Route::middleware('auth:sanctum')->post('carousel/add', [UploadController::class, 'add']); //Upload ảnh carousel
+        Route::middleware('auth:sanctum')->get('carousel/show', [UploadController::class, 'show']); //Lấy carousel
+        Route::middleware('auth:sanctum')->delete('carousel/delete/{id}', [UploadController::class, 'delete']); //Xóa carousel
+        Route::middleware('auth:sanctum')->put('carousel/updateStatus/{id}', [UploadController::class, 'updateStatus']); //Cập nhật trạng thái
+        Route::get('carousel/showAll', [UploadController::class, 'showAll']); //Lấy tất cả carousel có trạng thái 1
 
     },
     Route::post('upload', [UploadController::class, 'uploadPreview']) //Upload ảnh previwe trong bài viết

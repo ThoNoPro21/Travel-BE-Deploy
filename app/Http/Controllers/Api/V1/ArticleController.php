@@ -78,6 +78,20 @@ class ArticleController extends Controller
         }
         return response()->json(['success' => false, 'code' => 404, 'message' => 'Không tồn tại bài viết!'], 404);
     }
+    //Lấy 4 bài viết mới nhất
+    public function articleNew()
+    {
+        $data = Article::where('status', 1)->with([
+            'topic', 'user', 'location',
+            'place' => function ($query) {
+                $query->select('name');
+            },
+            'festival' => function ($query) {
+                $query->select('name');
+            }
+        ])->latest()->take(4)->get();
+        return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công !', 'data' => $data]);
+    }
 
     // Lất tả cả bài viết
     public function show(Request $request)

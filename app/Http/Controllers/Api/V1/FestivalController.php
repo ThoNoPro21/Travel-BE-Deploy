@@ -9,23 +9,70 @@ use Illuminate\Http\Request;
 
 class FestivalController extends Controller
 {
+    // Xóa festival
+    public function delete($id)
+    {
+        try {
+            $data = Festival::where('festivals_id', $id)->first();
+            if ($data) {
+                return $data->images;
+                // Cloudinary::destroy($data->publicId);
+                // $data->delete();
+                return response()->json(['success' => true, 'code' => 200, 'message' => 'Xóa thành công!',]);
+            } else {
+                return "Không tìm thấy festival có ID: $id";
+            }
+        } catch (\Exception $e) {
+            // Xử lý lỗi nếu có
+            return $e->getMessage();
+        }
+    }
+    //Cập nhật trạng thái status
+    public function updateStatus(Request $request, $id)
+    {
+        $festival = Festival::where('festivals_id', $id)->first();
+        if ($festival) {
+            if ($request->has('status')) {
+                $festival->status = intval($request['status']);
+                $festival->save();
+                return response()->json(['success' => true, 'code' => 200, 'message' => 'Cập nhật thành công!',]);
+            }
+            return response()->json(['success' => false, 'code' => 404, 'message' => 'Không tìm thấy!',], 404);
+        }
+    }
     //Lấy festival theo tháng
-    public function showPagination($month)
+    public function showFestivalByMonth($month)
     {
         $startDate = date('Y') . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-01 00:00:00';
         $endDate = date('Y-m-t', strtotime($startDate)) . ' 23:59:59';
 
-        // Thực hiện lọc dữ liệu
-        $festival = Festival::whereBetween('created_at', [$startDate, $endDate])->with('location')->paginate(10);
-        if (!$festival->isEmpty()) {
-            return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $festival]);
+        $festivals = Festival::where(function ($query) use ($startDate, $endDate) {
+            $query->where(function ($query) use ($startDate, $endDate) {
+                $query->where('start_date', '>=', $startDate)
+                    ->where('start_date', '<=', $endDate);
+            })->orWhere(function ($query) use ($startDate, $endDate) {
+                $query->where('end_date', '>=', $startDate)
+                    ->where('end_date', '<=', $endDate);
+            });
+        })->with('location')->paginate(10);
+
+        if (!$festivals->isEmpty()) {
+            return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $festivals]);
         }
-        return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $festival], 404);
+        return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công'], 404);
     }
-    public function show()
+    public function show(Request $request)
     {
-        $data = Festival::with('location')->get();
-        return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
+        if ($request->has('type')) {
+            if (intval($request->type) === 1) {
+                $data = Festival::where('status', 1)->with('location')->paginate(20);
+                return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
+            } else {
+                $data = Festival::with('location')->paginate(10);
+                return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
+            }
+        }
+        return response()->json(['success' => false, 'code' => 404, 'message' => 'Không tìm thấy !',], 404);
     }
     //Thêm festival
     public function add(Request $request)
