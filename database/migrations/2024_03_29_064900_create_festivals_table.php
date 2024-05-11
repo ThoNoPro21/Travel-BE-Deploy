@@ -17,7 +17,7 @@ return new class extends Migration
             $table->json('description')->change();
             $table->string('address', 255);
             $table->dateTime('start_date');
-            $table->dateTime('end_date')->default(0);
+            $table->dateTime('end_date');
             $table->integer('price')->nullable()->default(0);
             $table->json('images');
             $table->integer('status');
