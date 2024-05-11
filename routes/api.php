@@ -16,11 +16,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('users', function (Request $request) {
-    return 'cc';
-});
+    return $request->user();
+})->middleware('auth:sanctum');
 
-Route::group(
-    ['namespace' => 'Api\v1'],
+Route::prefix('v1')->group(
+    ['namespace' => 'api/v1'],
     function () {
         Route::middleware('auth:sanctum')->post('product/add', [ProductController::class, 'add']);   // Thêm sản phẩm
         Route::get('product/show/category/{id}', [ProductController::class, 'showByCategory']);    // Lấy tất cả theo danh mục
@@ -90,5 +90,4 @@ Route::group(
 
     },
     Route::post('upload', [UploadController::class, 'uploadPreview']) //Upload ảnh previwe trong bài viết
-
 );
