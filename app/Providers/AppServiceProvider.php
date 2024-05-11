@@ -19,6 +19,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        include __DIR__ . '/routes.php';
     }
 }
