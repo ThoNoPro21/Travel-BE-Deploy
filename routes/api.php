@@ -20,6 +20,7 @@ Route::get('users', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('v1')->group(
+    ['namespace' => 'api/v1'],
     function () {
         Route::middleware('auth:sanctum')->post('product/add', [ProductController::class, 'add']);   // Thêm sản phẩm
         Route::get('product/show/category/{id}', [ProductController::class, 'showByCategory']);    // Lấy tất cả theo danh mục
