@@ -3,7 +3,7 @@
 use App\Http\Controllers\api\v1\ArticleController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\v1\Auth\RegisterController;
-use App\Http\Controllers\api\v1\CategoryController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\api\v1\FestivalController;
 use App\Http\Controllers\api\v1\LocationController;
 use App\Http\Controllers\api\v1\OrderController;
@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('users', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
 
 Route::middleware('auth:sanctum')->post('product/add', [ProductController::class, 'add']);   // Thêm sản phẩm
 Route::get('product/show/category/{id}', [ProductController::class, 'showByCategory']);    // Lấy tất cả theo danh mục
