@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class UploadController extends Controller
 {
+    // Thêm review web
+    public function addReview(Request $request)
+    {
+        return $request;
+    }
     // Lấy tất cả carousel có trạng thái hiển thị là 1
     public function showAll()
     {
