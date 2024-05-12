@@ -27,6 +27,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class, 'user_id', 'users_id');
     }
+    public function review(): HasMany
+    {
+        return $this->HasMany(User::class, 'user_id', 'users_id');
+    }
     use HasApiTokens, HasFactory, Notifiable;
 
 

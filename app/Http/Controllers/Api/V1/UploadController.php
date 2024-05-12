@@ -4,15 +4,44 @@ namespace App\Http\Controllers\api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carousel;
+use App\Models\Review;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UploadController extends Controller
 {
+    //Lấy trung bình cộng review
+    public function averageRating()
+    {
+        $latestReviews = Review::select('user_id', DB::raw('MAX(created_at) as latest_review_date'))
+            ->groupBy('user_id');
+
+        // Lấy tổng số sao từ lượt đánh giá cuối cùng của mỗi người dùng
+        $userRatings = Review::select('user_id', DB::raw('SUM(rating) as total_stars'))
+            ->joinSub($latestReviews, 'latest_reviews', function ($join) {
+                $join->on('reviews.user_id', '=', 'latest_reviews.user_id')
+                    ->on('reviews.created_at', '=', 'latest_reviews.latest_review_date');
+            })
+            ->groupBy('user_id');
+
+        // Lấy tỷ lệ sao trung bình
+        $totalUsers = $userRatings->count();
+        $totalStars = $userRatings->sum('total_stars');
+        $averageRating = $totalStars / $totalUsers;
+        return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!', 'data' => $averageRating]);
+    }
     // Thêm review web
     public function addReview(Request $request)
     {
-        return $request;
+        $review = new Review();
+        if (intval($request['rating'])) {
+            $review->rating = $request['rating'];
+            $review->content = $request['content'];
+            $review->user_id = $request->user()->users_id;
+            return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!']);
+        }
+        return response()->json(['success' => false, 'code' => 404, 'message' => 'Lỗi!'], 404);
     }
     // Lấy tất cả carousel có trạng thái hiển thị là 1
     public function showAll()
