@@ -86,5 +86,6 @@ Route::prefix('v1')->group(function () {
     Route::get('carousel/showAll', [UploadController::class, 'showAll']); //Lấy tất cả carousel có trạng thái 1
 
     Route::middleware('auth:sanctum')->post('review/add', [UploadController::class, 'addReview']); //Thêm review web
+    Route::middleware('auth:sanctum')->post('review/getAverageRating', [UploadController::class, 'averageRating']); //Thêm review web
     Route::post('uploadPreview', [UploadController::class, 'uploadPreview']); //Upload ảnh previwe trong bài viết
 });

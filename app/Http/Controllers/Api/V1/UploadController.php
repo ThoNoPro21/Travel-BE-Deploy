@@ -39,6 +39,7 @@ class UploadController extends Controller
             $review->rating = $request['rating'];
             $review->content = $request['content'];
             $review->user_id = $request->user()->users_id;
+            $review->save();
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!']);
         }
         return response()->json(['success' => false, 'code' => 404, 'message' => 'Lỗi!'], 404);
