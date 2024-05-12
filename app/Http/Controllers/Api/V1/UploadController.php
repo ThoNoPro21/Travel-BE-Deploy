@@ -27,7 +27,7 @@ class UploadController extends Controller
 
         // Lấy tỷ lệ sao trung bình
         $totalUsers = $userRatings->count();
-        $totalStars = $userRatings->sum('total_stars');
+        $totalStars = $userRatings->sum(DB::raw('SUM(reviews.rating)'));
         $averageRating = $totalStars / $totalUsers;
         return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!', 'data' => $averageRating]);
     }
