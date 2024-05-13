@@ -18,21 +18,44 @@ class UploadController extends Controller
         $latestReviewCreatedAt = DB::table('reviews')->latest('created_at')->value('created_at');
 
         $users = DB::table('users')
-        ->join('reviews', 'reviews.user_id', 'users.users_id')
-        ->where('reviews.user_id', $latestUserId)
-        ->where('reviews.created_at', $latestReviewCreatedAt)
-        ->get();
+            ->join('reviews', 'reviews.user_id', 'users.users_id')
+            ->where('reviews.user_id', $latestUserId)
+            ->where('reviews.created_at', $latestReviewCreatedAt)
+            ->get();
 
         $reviews = DB::table('reviews')
-        ->where('created_at', $latestReviewCreatedAt)
-        ->select('rating')
-        ->get();
+            ->where('created_at', $latestReviewCreatedAt)
+            ->select('rating')
+            ->get();
 
         $totalStars = $reviews->sum('rating');
         $totalUsers = $users->count();
-
         $averageRating = $totalUsers > 0 ? $totalStars / $totalUsers : 0;
-        return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!', 'data' => $averageRating]);
+
+        $oneStarCount = $reviews->where('rating', 1)->count();
+        $twoStarCount = $reviews->where('rating', 2)->count();
+        $threeStarCount = $reviews->where('rating', 3)->count();
+        $fourStarCount = $reviews->where('rating', 4)->count();
+        $fiveStarCount = $reviews->where('rating', 5)->count();
+
+        $totalReviews = $reviews->count();
+
+        $oneStarPercentage = ($oneStarCount / $totalReviews) * 100;
+        $twoStarPercentage = ($twoStarCount / $totalReviews) * 100;
+        $threeStarPercentage = ($threeStarCount / $totalReviews) * 100;
+        $fourStarPercentage = ($fourStarCount / $totalReviews) * 100;
+        $fiveStarPercentage = ($fiveStarCount / $totalReviews) * 100;
+        return response()->json([
+            'success' => true, 'code' => 200, 'message' => 'Thành công!',
+            'data' => [
+                'average' => $averageRating,
+                'oneStar' => $oneStarPercentage,
+                'twoStar' => $twoStarPercentage,
+                'threeStar' => $threeStarPercentage,
+                'fourStar' => $fourStarPercentage,
+                'fiveStar' => $fiveStarPercentage
+            ]
+        ]);
     }
     // Thêm review web
     public function addReview(Request $request)
