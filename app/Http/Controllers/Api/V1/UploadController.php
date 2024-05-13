@@ -18,7 +18,7 @@ class UploadController extends Controller
             ->groupBy('reviews.user_id');
 
         // Lấy tổng số sao từ lượt đánh giá cuối cùng của mỗi người dùng
-        $userRatings = Review::select('reviews.user_id', DB::raw('SUM(reviews.rating'))
+        $userRatings = Review::select('reviews.user_id', DB::raw('reviews.rating'))
             ->joinSub($latestReviews, 'latest_reviews', function ($join) {
                 $join->on('reviews.user_id', '=', 'latest_reviews.user_id')
                     ->on('reviews.created_at', '=', 'latest_reviews.latest_review_date');
@@ -26,6 +26,7 @@ class UploadController extends Controller
             ->groupBy('reviews.user_id');
 
         // Lấy tỷ lệ sao trung bình
+        $totalStars = $userRatings->sum('reviews.rating');
         $totalUsers = $userRatings->count();
         $totalStars = $userRatings->sum(DB::raw('SUM(reviews.rating)'));
         $averageRating = $totalStars / $totalUsers;
