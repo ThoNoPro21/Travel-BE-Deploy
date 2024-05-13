@@ -15,11 +15,21 @@ class UploadController extends Controller
     public function averageRating()
     {
         $latestReviews = Review::select('reviews.user_id', DB::raw('MAX(reviews.created_at) as latest_review_date'))
+            ->whereColumn('reviews.created_at', '=', DB::raw('MAX(reviews.created_at)'))
             ->groupBy('reviews.user_id');
 
         // Lấy tổng số sao từ lượt đánh giá cuối cùng của mỗi người dùng
         $userRatings = Review::select('reviews.user_id', DB::raw('reviews.rating'))
             ->joinSub($latestReviews, 'latest_reviews', function ($join) {
+                $join->on('reviews.user_id', '=', 'latest_reviews.user_id')
+                    ->on('reviews.created_at', '=', 'latest_reviews.latest_review_date');
+            })
+            ->groupBy('reviews.user_id');
+        $subQuery = Review::select('user_id', DB::raw('MAX(created_at) as latest_review_date'))
+            ->groupBy('user_id');
+
+        $userRatings = Review::select('reviews.user_id', 'reviews.rating')
+            ->joinSub($subQuery, 'latest_reviews', function ($join) {
                 $join->on('reviews.user_id', '=', 'latest_reviews.user_id')
                     ->on('reviews.created_at', '=', 'latest_reviews.latest_review_date');
             })
