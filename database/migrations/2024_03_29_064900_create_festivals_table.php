@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('festivals', function (Blueprint $table) {
             $table->increments('festivals_id');
             $table->string('name');
-            $table->json('description')->change();
+            $table->json('description');
             $table->string('address', 255);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
