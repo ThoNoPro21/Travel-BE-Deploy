@@ -14,32 +14,24 @@ class UploadController extends Controller
     //Lấy trung bình cộng review
     public function averageRating()
     {
-        $latestReviews = Review::select('reviews.user_id', DB::raw('MAX(reviews.created_at) as latest_review_date'))
-            ->whereColumn('reviews.created_at', '=', DB::raw('MAX(reviews.created_at)'))
-            ->groupBy('reviews.user_id');
+        $latestUserId = DB::table('reviews')->latest('created_at')->value('user_id');
+        $latestReviewCreatedAt = DB::table('reviews')->latest('created_at')->value('created_at');
 
-        // Lấy tổng số sao từ lượt đánh giá cuối cùng của mỗi người dùng
-        $userRatings = Review::select('reviews.user_id', DB::raw('reviews.rating'))
-            ->joinSub($latestReviews, 'latest_reviews', function ($join) {
-                $join->on('reviews.user_id', '=', 'latest_reviews.user_id')
-                    ->on('reviews.created_at', '=', 'latest_reviews.latest_review_date');
-            })
-            ->groupBy('reviews.user_id');
-        $subQuery = Review::select('user_id', DB::raw('MAX(created_at) as latest_review_date'))
-            ->groupBy('user_id');
+        $users = DB::table('users')
+        ->join('reviews', 'reviews.user_id', 'users.users_id')
+        ->where('reviews.user_id', $latestUserId)
+        ->where('reviews.created_at', $latestReviewCreatedAt)
+        ->get();
 
-        $userRatings = Review::select('reviews.user_id', 'reviews.rating')
-            ->joinSub($subQuery, 'latest_reviews', function ($join) {
-                $join->on('reviews.user_id', '=', 'latest_reviews.user_id')
-                    ->on('reviews.created_at', '=', 'latest_reviews.latest_review_date');
-            })
-            ->groupBy('reviews.user_id');
+        $reviews = DB::table('reviews')
+        ->where('created_at', $latestReviewCreatedAt)
+        ->select('rating')
+        ->get();
 
-        // Lấy tỷ lệ sao trung bình
-        $totalStars = $userRatings->sum('reviews.rating');
-        $totalUsers = $userRatings->count();
-        $totalStars = $userRatings->sum(DB::raw('SUM(reviews.rating)'));
-        $averageRating = $totalStars / $totalUsers;
+        $totalStars = $reviews->sum('rating');
+        $totalUsers = $users->count();
+
+        $averageRating = $totalUsers > 0 ? $totalStars / $totalUsers : 0;
         return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!', 'data' => $averageRating]);
     }
     // Thêm review web
