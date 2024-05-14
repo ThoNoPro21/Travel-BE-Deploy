@@ -42,15 +42,28 @@ class UploadController extends Controller
         $threeStarPercentage = ($threeStarCount / $totalRating) * 100;
         $fourStarPercentage = ($fourStarCount / $totalRating) * 100;
         $fiveStarPercentage = ($fiveStarCount / $totalRating) * 100;
+
+        $totalReview = Review::all()->count();
+        $totalOneStar = Review::where('rating', 1)->count();
+        $totalTwoStar = Review::where('rating', 2)->count();
+        $totalThreeStar = Review::where('rating', 3)->count();
+        $totalFourStar = Review::where('rating', 4)->count();
+        $totalFiveStar = Review::where('rating', 5)->count();
         return response()->json([
             'success' => true, 'code' => 200, 'message' => 'Thành công!',
             'data' => [
                 'average' => $averageRating,
-                'oneStar' => $oneStarPercentage,
-                'twoStar' => $twoStarPercentage,
-                'threeStar' => $threeStarPercentage,
-                'fourStar' => $fourStarPercentage,
-                'fiveStar' => $fiveStarPercentage
+                'oneStarPercent' => $oneStarPercentage,
+                'twoStarPercent' => $twoStarPercentage,
+                'threeStarPercent' => $threeStarPercentage,
+                'fourStarPercent' => $fourStarPercentage,
+                'fiveStarPercent' => $fiveStarPercentage,
+                'totalReview' => $totalReview,
+                'totalOneStar' => $totalOneStar,
+                'totalTwoStar' => $totalTwoStar,
+                'totalThreeStar' => $totalThreeStar,
+                'totalFourStar' => $totalFourStar,
+                'totalFiveStar' => $totalFiveStar,
             ]
         ]);
     }
