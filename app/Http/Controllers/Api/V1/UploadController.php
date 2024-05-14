@@ -31,11 +31,11 @@ class UploadController extends Controller
         $totalUsers = $users->count();
         $averageRating = $totalRating > 0 ? $totalRating / $totalUsers : 0;
 
-        $oneStarCount = Review::where('rating', 1)->count();
-        $twoStarCount = Review::where('rating', 2)->count();
-        $threeStarCount = Review::where('rating', 3)->count();
-        $fourStarCount = Review::where('rating', 4)->count();
-        $fiveStarCount = Review::where('rating', 5)->count();
+        $oneStarCount = Review::where('rating', 1)->sum('rating');
+        $twoStarCount = Review::where('rating', 2)->sum('rating');
+        $threeStarCount = Review::where('rating', 3)->sum('rating');
+        $fourStarCount = Review::where('rating', 4)->sum('rating');
+        $fiveStarCount = Review::where('rating', 5)->sum('rating');
 
         $oneStarPercentage = ($oneStarCount / $totalRating) * 100;
         $twoStarPercentage = ($twoStarCount / $totalRating) * 100;
