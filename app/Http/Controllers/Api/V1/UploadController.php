@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\DB;
 
 class UploadController extends Controller
 {
+    public function getReviewByRating($rating)
+    {
+        if ($rating >= 1 && $rating <= 5) {
+            $data = Review::where('rating', $rating)->with('user')->paginate(10);
+            return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!', 'data' => $data]);
+        }
+        return response()->json(['success' => false, 'code' => 404, 'message' => 'Lỗi !',], 404);
+    }
     //Lấy trung bình cộng review
     public function averageRating()
     {
