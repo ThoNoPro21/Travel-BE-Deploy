@@ -14,37 +14,26 @@ class UploadController extends Controller
     //Lấy trung bình cộng review
     public function averageRating()
     {
-        $latestUserId = DB::table('reviews')->latest('created_at')->value('user_id');
-        $latestReviewCreatedAt = DB::table('reviews')->latest('created_at')->value('created_at');
+        $totalRating = DB::table('reviews')->sum('reviews.rating');
 
         $users = DB::table('users')
             ->join('reviews', 'reviews.user_id', 'users.users_id')
-            ->where('reviews.user_id', $latestUserId)
-            ->where('reviews.created_at', $latestReviewCreatedAt)
             ->get();
 
-        $reviews = DB::table('reviews')
-            ->where('created_at', $latestReviewCreatedAt)
-            ->select('rating')
-            ->get();
-
-        $totalStars = $reviews->sum('rating');
         $totalUsers = $users->count();
-        $averageRating = $totalUsers > 0 ? $totalStars / $totalUsers : 0;
+        $averageRating = $totalRating > 0 ? $totalRating / $totalUsers : 0;
 
-        $oneStarCount = $reviews->where('rating', 1)->count();
-        $twoStarCount = $reviews->where('rating', 2)->count();
-        $threeStarCount = $reviews->where('rating', 3)->count();
-        $fourStarCount = $reviews->where('rating', 4)->count();
-        $fiveStarCount = $reviews->where('rating', 5)->count();
+        $oneStarCount = Review::where('rating', 1)->count();
+        $twoStarCount = Review::where('rating', 2)->count();
+        $threeStarCount = Review::where('rating', 3)->count();
+        $fourStarCount = Review::where('rating', 4)->count();
+        $fiveStarCount = Review::where('rating', 5)->count();
 
-        $totalReviews = $reviews->count();
-
-        $oneStarPercentage = ($oneStarCount / $totalReviews) * 100;
-        $twoStarPercentage = ($twoStarCount / $totalReviews) * 100;
-        $threeStarPercentage = ($threeStarCount / $totalReviews) * 100;
-        $fourStarPercentage = ($fourStarCount / $totalReviews) * 100;
-        $fiveStarPercentage = ($fiveStarCount / $totalReviews) * 100;
+        $oneStarPercentage = ($oneStarCount / $totalRating) * 100;
+        $twoStarPercentage = ($twoStarCount / $totalRating) * 100;
+        $threeStarPercentage = ($threeStarCount / $totalRating) * 100;
+        $fourStarPercentage = ($fourStarCount / $totalRating) * 100;
+        $fiveStarPercentage = ($fiveStarCount / $totalRating) * 100;
         return response()->json([
             'success' => true, 'code' => 200, 'message' => 'Thành công!',
             'data' => [
