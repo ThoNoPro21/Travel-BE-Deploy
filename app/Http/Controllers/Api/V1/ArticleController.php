@@ -121,7 +121,11 @@ class ArticleController extends Controller
         $post = new Article();
 
         $post->title = $request['title'];
-        $post->status = $request['status'] ?? 0;
+        if ($request->user()->role === 1) {
+            $post->status = 1;
+        } else {
+            $post->status = $request['status'] ?? 0;
+        }
         $post->content = $request['content'];
         $post->place_id = ($request['place_id'] === "undefined") ? null : $request['place_id'];
         $post->festival_id = ($request['festival_id'] === "undefined") ? null : $request['festival_id'];
