@@ -33,7 +33,7 @@ class PlaceController extends Controller
     {
         $place = Place::where('places_id', $id)->with('location')->first();
         if ($place) {
-            $products = $place->location->products()->paginate(1);
+            $products = $place->location->products()->paginate(6);
 
             if ($products->total() > 0) {
                 return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $products]);
@@ -47,7 +47,7 @@ class PlaceController extends Controller
     {
         $place = Place::where('places_id', $id)->with('location')->first();
         if ($place) {
-            $festivals = $place->location->festivals()->with('location')->paginate(1);
+            $festivals = $place->location->festivals()->with('location')->paginate(4);
             if ($festivals->total() > 0) {
                 return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $festivals]);
             }
@@ -60,7 +60,7 @@ class PlaceController extends Controller
     {
         $place = Place::where('places_id', $id)->with('location')->first();
         if ($place) {
-            $articles = $place->location->articles()->with('user')->paginate(1);
+            $articles = $place->location->articles()->with('user')->paginate(4);
 
             if ($articles->total() > 0) {
                 return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $articles]);
