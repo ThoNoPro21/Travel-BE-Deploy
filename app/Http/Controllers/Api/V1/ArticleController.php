@@ -105,7 +105,7 @@ class ArticleController extends Controller
             'festival' => function ($query) {
                 $query->select('name');
             }
-        ])->paginate(10);
+        ])->orderBy('created_at', 'desc')->paginate(10);
 
         $countPostPending = Article::where('status', 0)->count();
 
