@@ -35,7 +35,7 @@ class ArticleController extends Controller
                 $query->where('topic_id', $id);
             })
                 ->where('status', 1)
-                ->with('topic', 'user', 'location',)->paginate(10);
+                ->with('topic', 'user', 'location',)->orderBy('created_at', 'desc')->paginate(10);
         }
         if (!$data->isEmpty()) {
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công!', 'data' => $data]);
