@@ -29,7 +29,7 @@ class ArticleController extends Controller
     public function showByTopic(Request $request, $id)
     {
         if (intval($id) == 0) {
-            $data = Article::where('status', 1)->with('topic', 'user', 'location')->paginate(10);
+            $data = Article::where('status', 1)->with('topic', 'user', 'location')->orderBy('created_at', 'desc')->paginate(10);
         } else {
             $data = Article::whereHas('topic', function ($query) use ($id) {
                 $query->where('topic_id', $id);
