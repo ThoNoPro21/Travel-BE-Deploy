@@ -38,7 +38,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->post('post/add', [ArticleController::class, 'add']);     // Thêm bài viết
     Route::middleware('auth:sanctum')->post('post/addFavourite ', [ArticleController::class, 'addFavourite']);     // Thêm yêu thích bài viết
-    Route::middleware('auth:sanctum')->post('post/removeFavourite ', [ArticleController::class, 'removeFavourite']);     // Xóa yêu thích bài viết
+    Route::middleware('auth:sanctum')->delete('post/removeFavourite ', [ArticleController::class, 'removeFavourite']);     // Xóa yêu thích bài viết
     Route::get('post/show', [ArticleController::class, 'show']); // Lấy tất cả bài viết
     Route::get('post/show/{id}', [ArticleController::class, 'showById']); // Lấy bài viết theo id
     Route::get('post/topic/{id}', [ArticleController::class, 'showByTopic']); // Lấy bài viết chủ đề
