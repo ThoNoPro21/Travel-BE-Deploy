@@ -15,9 +15,10 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class ArticleController extends Controller
 {
+    //Lấy bài viết đã lưu
     public function showFavourite(Request $request)
     {
-        $favourites = ArticleFavourite::where('user_id', $request->user()->users_id)->get();
+        $favourites = ArticleFavourite::where('user_id', $request->user()->users_id)->with('topic', 'user', 'location')->get();
         if ($favourites->isEmpty()) {
             return response()->json(['success' => false, 'message' => 'Không có bài viết yêu thích!'], 200);
         } else {
