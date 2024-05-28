@@ -20,7 +20,7 @@ Route::get('users', function (Request $request) {
 })->middleware('auth:sanctum');
 Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->post('product/add', [ProductController::class, 'add']);   // Thêm sản phẩm
-    Route::get('product/show/category/{id}', [ProductController::class, 'showByCategory']);    // Lấy tất cả theo danh mục
+    Route::get('product/show/category/{id}/{searchParam}', [ProductController::class, 'showByCategory']);    // Lấy tất cả theo danh mục
     Route::get('product/show/{id}', [ProductController::class, 'showById']);    // Lấy theo Id
     Route::get('product/showRelatedProduct/{id}', [ProductController::class, 'showRelatedProduct']);    // Lấy sản phẩm liên quan
     Route::middleware('auth:sanctum')->post('product/addToCart', [ProductController::class, 'addToCart']);    // Thêm giỏ hàng

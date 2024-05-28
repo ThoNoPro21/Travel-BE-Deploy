@@ -129,8 +129,9 @@ class ProductController extends Controller
         return response()->json(['success' => false, 'code' => 404, 'message' => 'Không tìm thấy dữ liệu', 404]);
     }
     // Lấy tất cả sản phẩm theo danh mục
-    public function showByCategory($id)
+    public function showByCategory($id,Request $request)
     {
+        return($request->all();)
         if (intval($id) === 0) {
             $data = Product::paginate(20);
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
