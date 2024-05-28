@@ -25,9 +25,9 @@ class ArticleController extends Controller
         return response()->json(['success' => true, 'code' => 200, 'message' => 'Lưu vào mục yêu thích thành công!']);
     }
     //Xóa yêu thích
-    public function removeFavourite($id)
+    public function removeFavourite($id, Request $request)
     {
-        ArticleFavourite::where('article_favorites_id', $id)->delete();
+        ArticleFavourite::where('user_id', $request->user()->users_id)->delete();
         return response()->json(['success' => true, 'code' => 200, 'message' => 'Hủy yêu thích thành công!']);
     }
     //Thêm comment
