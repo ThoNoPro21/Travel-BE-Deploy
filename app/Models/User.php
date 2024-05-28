@@ -19,6 +19,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ArticleComment::class, 'user_id', 'users_id');
     }
+    public function ArticleFavourites(): HasMany
+    {
+        return $this->hasMany(ArticleFavourite::class, 'user_id', 'users_id');
+    }
     public function PlaceComments(): HasMany
     {
         return $this->hasMany(PlaceComment::class, 'user_id', 'users_id');

@@ -33,6 +33,10 @@ class Article extends Model
     {
         return $this->hasMany(ArticleComment::class, 'article_id', 'articles_id');
     }
+    public function favourites(): HasMany
+    {
+        return $this->hasMany(ArticleFavourite::class, 'article_id', 'articles_id');
+    }
     use HasFactory;
     protected $table = 'articles';
     protected $primaryKey = 'articles_id';

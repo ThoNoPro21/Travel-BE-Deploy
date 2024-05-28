@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\ArticleComment;
+use App\Models\ArticleFavourite;
 use App\Models\Location;
 use App\Models\Topic;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +15,21 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class ArticleController extends Controller
 {
+    //Thêm yêu thích
+    public function addFavourite(Request $request)
+    {
+        $favourites = new ArticleFavourite();
+        $favourites->user_id = $request->user()->users_id;
+        $favourites->article_id = $request['article_id'];
+        $favourites->save();
+        return response()->json(['success' => true, 'code' => 200, 'message' => 'Lưu vào mục yêu thích thành công!']);
+    }
+    //Xóa yêu thích
+    public function removeFavourite($id)
+    {
+        ArticleFavourite::where('article_favorites_id', $id)->delete();
+        return response()->json(['success' => true, 'code' => 200, 'message' => 'Hủy yêu thích thành công!']);
+    }
     //Thêm comment
     public function addComment(Request $request)
     {
