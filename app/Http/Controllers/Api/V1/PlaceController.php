@@ -15,15 +15,15 @@ use function PHPUnit\Framework\isEmpty;
 class PlaceController extends Controller
 {
     //Lấy địa danh theo địa điểm
-    public function showPlaceByLocation($id)
+    public function showPlaceByLocation($id, Request $request)
     {
         if (intval($id) === 0) {
-            $data = Place::with('location')->paginate(10);
+            $data = Place::with('location')->where('name', 'like', '%' . $request->input('searchParam') . '%')->paginate(10);
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
         }
         $count = Place::with('location')->where('location_id', $id)->count();
         if ($count > 0) {
-            $data = Place::with('location')->where('location_id', $id)->paginate(10);
+            $data = Place::with('location')->where('location_id', $id)->where('name', 'like', '%' . $request->input('searchParam') . '%')->paginate(10);
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
         }
         return response()->json(['success' => false, 'message' => 'Không tìm thấy địa danh nào', 'data' => []], 201);
