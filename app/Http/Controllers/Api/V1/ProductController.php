@@ -131,7 +131,7 @@ class ProductController extends Controller
     // Lấy tất cả sản phẩm theo danh mục
     public function showByCategory($id, Request $request)
     {
-        if (intval($id) === 0 && empty($request->input('searchParam'))) {
+        if (intval($id) === 0) {
             $data = Product::where('name', 'like', '%' . $request->input('searchParam') . '%')->paginate(20);
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
         } else {
