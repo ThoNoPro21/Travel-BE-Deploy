@@ -25,9 +25,9 @@ class ArticleController extends Controller
         return response()->json(['success' => true, 'code' => 200, 'message' => 'Lưu vào mục yêu thích thành công!']);
     }
     //Xóa yêu thích
-    public function removeFavourite($id, Request $request)
+    public function removeFavourite($id)
     {
-        ArticleFavourite::where('user_id', $request->user()->users_id)->delete();
+        ArticleFavourite::where('article_favorites_id', $id)->delete();
         return response()->json(['success' => true, 'code' => 200, 'message' => 'Hủy yêu thích thành công!']);
     }
     //Thêm comment
@@ -42,7 +42,7 @@ class ArticleController extends Controller
     }
 
     //Lấy bài viết theo chủ đề
-    public function showByTopic(Request $request, $id)
+    public function showByTopic($id)
     {
         if (intval($id) == 0) {
             $data = Article::where('status', 1)->with('topic', 'user', 'location')->orderBy('created_at', 'desc')->paginate(10);
