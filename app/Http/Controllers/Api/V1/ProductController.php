@@ -132,7 +132,7 @@ class ProductController extends Controller
     public function showByCategory($id, Request $request)
     {
         if (intval($id) === 0 && empty($request->input('searchParam'))) {
-            $data = Product::paginate(20);
+            $data = Product::where('name', 'like', '%' . $request->input('searchParam') . '%')->paginate(20);
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
         } else {
             $data = Product::where('category_id', $id)->where('name', 'like', '%' . $request->input('searchParam') . '%')->paginate(10);
