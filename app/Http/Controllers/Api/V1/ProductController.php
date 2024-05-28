@@ -135,7 +135,7 @@ class ProductController extends Controller
             $data = Product::paginate(20);
             return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
         } else {
-            $data = Product::where('category_id', $id)->paginate(10);
+            $data = Product::where('category_id', $id)->where('name', 'like', '%' . $request->input('searchParam') . '%')->paginate(10);
             if (!$data->isEmpty()) {
                 return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công', 'data' => $data]);
             } else {
