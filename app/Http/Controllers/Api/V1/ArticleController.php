@@ -15,6 +15,16 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class ArticleController extends Controller
 {
+    //Lấy bài viết cá nhân 
+    public function showPostMe(Request $request)
+    {
+        $post = Article::where('user_id', $request->user()->users_id)->with(['article.topic', 'article.user', 'article.location'])->get();
+        if ($post->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Không có bài viết yêu thích!'], 200);
+        } else {
+            return response()->json(['success' => true, 'message' => 'Có bài viết yêu thích!', 'data' => $post], 200);
+        }
+    }
     //Lấy bài viết đã lưu
     public function showFavourite(Request $request)
     {
