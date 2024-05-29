@@ -86,7 +86,7 @@ class ProductController extends Controller
         $cart->quantity = intval($request['quantity']);
         if (intval($request['product_id']) !== 0) {
             $cart->product_id = $request['product_id'];
-            $product = Cart::where('product_id', $request['product_id'])->first();
+            $product = Cart::where('product_id', $request['product_id'])->where('user_id', $request->user()->users_id)->first();
             if (!$product) {
                 $cart->save();
                 return response()->json(['success' => true, 'code' => 200, 'message' => 'Thành công']);
