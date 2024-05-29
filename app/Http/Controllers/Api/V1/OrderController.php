@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    //Lấy đơn hàng cá nhân
+    public function showOrderByUser(Request $request)
+    {
+        $order = Order::where('user_id', $request->user()->users_id)->with(['orderDetails.product', 'user',])->get();
+        if ($order->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Không có đơn hàng nào !'], 200);
+        } else {
+            return response()->json(['success' => true, 'message' => 'Thành công!', 'data' => $order], 200);
+        }
+    }
     //Tạo đơn hàng
     public function add(Request $request)
     {

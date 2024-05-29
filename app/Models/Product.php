@@ -22,7 +22,10 @@ class Product extends Model
     {
         return $this->hasMany(ProductComment::class, 'product_id', 'products_id');
     }
-
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'product_id', 'products_id');
+    }
     protected $table = 'products';
     protected $primaryKey = 'products_id';
     protected $fillable = [

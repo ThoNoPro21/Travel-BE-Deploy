@@ -12,7 +12,10 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Order::class, 'order_id', 'orders_id');
     }
-
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'products_id');
+    }
     use HasFactory;
     protected $table = 'order_details';
     protected $primaryKey = 'order_details_id';

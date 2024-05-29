@@ -27,11 +27,13 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->get('product/showCart', [ProductController::class, 'showCart']);    // Thêm giỏ hàng
     Route::middleware('auth:sanctum')->put('product/updateCart/{id}', [ProductController::class, 'updateCart']);    // cập nhật giỏ hàng
     Route::middleware('auth:sanctum')->delete('product/deleteCart/{id}', [ProductController::class, 'deleteCart']);    // Xóa giỏ hàng
+
     Route::middleware('auth:sanctum')->post('product/comment/add', [ProductController::class, 'addComment']); //Thêm comment
     Route::get('product/show/comments/{id}', [ProductController::class, 'showCommentByProduct']); // Lấy comment theo sản phẩm
 
 
     Route::middleware('auth:sanctum')->post('order/add', [OrderController::class, 'add']);    // Tạo đơn hàng
+    Route::middleware('auth:sanctum')->get('order/showOrderByUser', [OrderController::class, 'showOrderByUser']);    // Lấy đơn hàng cá nhân
 
     Route::get('category/show', [CategoryController::class, 'show']);       // Lấy tất cả danh mục
     Route::post('category/add', [CategoryController::class, 'add']);       // Thêm danh mục
