@@ -24,7 +24,7 @@ class OrderController extends Controller
     public function add(Request $request)
     {
         $order = new Order();
-        $order->address = $request['address'];
+        $order->address = $request['address'] . '-' . $request['ward'] . '-' . $request['district'] . '-' . $request['city'];
         $order->phone_number = $request['phoneNumber'];
         $order->total_amount = $request['totalAmount'];
         $order->note = $request['note'];
