@@ -20,7 +20,7 @@ class ArticleController extends Controller
     {
         $post = Article::where('user_id', $request->user()->users_id)->with(['topic', 'user', 'location'])->get();
         if ($post->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Không có bài viết yêu thích!'], 200);
+            return response()->json(['success' => false, 'message' => 'Không có bài viết !'], 200);
         } else {
             return response()->json(['success' => true, 'message' => 'Có bài viết yêu thích!', 'data' => $post], 200);
         }
