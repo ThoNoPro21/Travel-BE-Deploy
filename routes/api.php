@@ -34,6 +34,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->post('order/add', [OrderController::class, 'add']);    // Tạo đơn hàng
     Route::middleware('auth:sanctum')->get('order/showOrderByUser', [OrderController::class, 'showOrderByUser']);    // Lấy đơn hàng cá nhân
+    Route::middleware('auth:sanctum')->get('order/showAll', [OrderController::class, 'showAll']);    // Lấy tất cả đơn hàng
 
     Route::get('category/show', [CategoryController::class, 'show']);       // Lấy tất cả danh mục
     Route::post('category/add', [CategoryController::class, 'add']);       // Thêm danh mục

@@ -10,6 +10,17 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    //Lấy tất cả đơn hàng và phân trang
+    public function showAll(Request $request)
+    {
+        $status = $request->input('status');
+        $order = Order::where('status', $request['status'])->with(['orderDetails.product'])->paginate(10);
+        if ($order->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Không có đơn hàng nào !'], 200);
+        } else {
+            return response()->json(['success' => true, 'message' => 'Thành công!', 'data' => $order], 200);
+        }
+    }
     //Lấy đơn hàng cá nhân
     public function showOrderByUser(Request $request)
     {
