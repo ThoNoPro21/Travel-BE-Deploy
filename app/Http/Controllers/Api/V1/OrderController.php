@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function showAll(Request $request)
     {
         $status = $request->input('status');
-        $order = Order::where('status', $request['status'])->with(['orderDetails.product'])->paginate(10);
+        $order = Order::where('status', $request['status'])->with(['orderDetails.product', 'user'])->paginate(10);
         if ($order->isEmpty()) {
             return response()->json(['success' => false, 'message' => 'Không có đơn hàng nào !'], 200);
         } else {
